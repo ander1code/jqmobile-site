@@ -1,0 +1,1860 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Revisão de jQuery Mobile</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="theme-color" content="#108040"/>
+    <script src="jQuery/jquery-1.8.0.js"></script>
+    <script src="jQuery/jquery.mobile-1.4.5.js"></script>
+    <link href="jQuery/jquery.mobile-1.4.5.css" rel="stylesheet" />
+
+
+    <style>
+        .MinhaDiv {
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            height: 50px;
+            text-align: center;
+        }
+
+        #div01 {
+            background-color: red;
+        }
+
+        #div02 {
+            background-color: green;
+        }
+
+        #div03 {
+            background-color: blue;
+        }
+
+        #div04 {
+            background-color: orange;
+        }
+
+        @font-face {
+            font-family: 'Helvetica';
+            src: url('fonts/Helvetica.otf');
+        }
+
+        body {
+            font-family: Helvetica;
+        }
+
+
+        #divTap, #divSwipe, #divSwipeLeft, #divSwipeRight, #divTapHold {
+            width: 280px;
+            height: 80px;
+            background-color: orange;
+            text-align: center;
+            color: white;
+            font-size: 50px;
+        }
+
+        #divSwipe {
+            background-color: lightblue;
+            color: black;
+        }
+
+        #divSwipeLeft {
+            background-color: red;
+            font-size: 38px;
+        }
+
+        #divSwipeRight {
+            background-color: blue;
+            font-size: 38px;
+        }
+
+        #divTapHold {
+            background-color: brown;
+            font-size: 38px;
+        }
+
+        #divRet {
+            width: 250px;
+            height: 50px;
+            background-color: red;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        ul > li {
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        li {
+            font-weight: bold;
+        }
+
+            li > p {
+                font-weight: normal;
+                color: red;
+            }
+    </style>
+
+    <script type="text/javascript" language="javascript">
+
+
+        var contMove = 0;
+        var contClick = 0;
+        var contDown = 0;
+        var contCancel = 0;
+        var contOut = 0;
+        var contOver = 0;
+        var contUp = 0;
+
+        $(document).on("pagecreate", function () {
+
+            
+
+            $("#divTap").on("tap", function () {
+
+                $(this).text("TAP");
+
+            });
+
+            $("#divSwipe").on("swipe", function () {
+
+                $(this).text("SWIPE");
+
+            });
+
+            $("#divSwipeLeft").on("swipeleft", function () {
+
+                $(this).text("SWIPELEFT");
+
+            });
+
+            $("#divSwipeRight").on("swiperight", function () {
+
+                $(this).text("SWIPERIGHT");
+
+            });
+
+            $("#divTapHold").on("taphold", function () {
+
+                $(this).text("TAPHOLD");
+
+            });
+
+            //Mouse Virtual:
+
+            $("#divRet").on("vclick", function () {
+
+                $("#par1").text(contClick++ + " vezes.");
+
+            });
+
+            $("#divRet").on("vmousecancel", function () {
+
+                $("#par2").text(contCancel++ + " vezes.");
+
+            });
+
+            $("#divRet").on("vmousedown", function () {
+
+                $("#par3").text(contDown++ + " vezes.");
+            });
+
+
+            $("#divRet").on("vmousemove", function () {
+
+                $("#par4").text(contMove++ + " vezes.");
+            });
+
+            $("#divRet").on("vmouseout", function () {
+
+                $("#par5").text(contOut++ + " vezes.");
+            });
+
+            $("#divRet").on("vmouseover", function () {
+
+                $("#par6").text(contOver++ + " vezes.");
+            });
+
+            $("#divRet").on("vmouseup", function () {
+
+                $("#par7").text(contUp++ + " vezes.");
+            });
+
+           
+
+        });
+
+        
+
+    </script>
+</head>
+<body>
+
+
+    <script>
+
+        $(document).on("pageshow", "#index", function () {
+
+            $("#imgIntro").hide(300, function () {
+
+                window.location = "#principal";
+
+            });
+        });
+
+    </script>
+
+    <!-- Página Introdução -->
+    <div data-role="page" id="index" style="background-color: #333333;">
+        <div data-role="main" class="ui-content" style="text-align:center;">
+            <img src="images/teste.fw.png" id="imgIntro" style="width:70%;margin-top:100px;" />
+        </div>
+    </div>
+
+
+    <!-- Página Inicial -->
+    <div data-role="page" id="principal" style="background-color: #108040;">
+        <div data-role="header" data-theme="b" class="ui-header" data-position="fixed" style="background-color: #108040;">
+            <div data-role="navbar" id="barraNav">
+                <nav>
+                    <ul>
+                        <li><a href="#tutorial" style="color: goldenrod;" data-transition="flow" data-theme="b" class="ui-btn ui-btn-icon-top ui-icon-home">Tutorial</a></li>
+                        <li><a href="#lista" style="color: goldenrod;" data-transition="flow" data-theme="b" class="ui-btn ui-btn-icon-top ui-icon-grid">Lists</a></li>
+                        <li><a href="#formulario" style="color: goldenrod;" data-transition="flow" data-theme="b" class="ui-btn ui-btn-icon-top ui-icon-edit">Forms</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <img src="images/logo.png" style="margin-top: 10px;" />
+
+            <p style="font-size:15px;text-align:right;font-style:italic;">
+                "jQuery Mobile é um framework para o desenvolvimento de aplicações web para dispositivos móveis. Adota um sistema unificado de interface de usuário,
+                com base em HTML5 e CSS3 e, usando JavaScript de alto nível, gera código compatível com ampla variedade de plataformas."<br>(NOVATEC, 2013)
+            </p>
+            
+            <!--<a href="#popAbout" data-rel="popup" class="ui-btn ui-btn-b ui- ui-mini ui-icon-comment ui-btn-icon-left" data-transition="pop" style="margin-top: 50px; color: goldenrod;">jQuery Mobile?</a>-->
+            
+            
+            <a href="#destaque" class="ui-btn ui-mini ui-icon-star ui-btn-icon-left ui-btn-b" data-transition="pop" style="background-color: goldenrod; color: black; margin-top:40px;">Destaques</a>
+
+
+            <div data-role="popup" id="popAbout">
+                <p style="font-size:15px;text-align:right;font-style:italic;">
+                    "jQuery Mobile é um framework para o desenvolvimento de aplicações web para dispositivos móveis. Adota um sistema unificado de interface de usuário,
+                    com base em HTML5 e CSS3 e, usando JavaScript de alto nível, gera código compatível com ampla variedade de plataformas."<br>(NOVATEC, 2013)
+                </p>
+                <!--
+                <p style="font-size:15px;text-align:right;">
+                    Este site visa mostrar um pouco as possibilidades do uso do jquery Mobile como Framework na construção de sites para exibição, principalmente em dispositivos móveis.
+                    Sua estrutura de links baseia-se na página "Learn jQueryMobile" do w3schools.com.
+                </p>
+                -->
+            </div>
+
+        </div>
+        <footer data-theme="b" style="color:#78CFF5" data-role="footer" class="ui-footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#tema" class="ui-btn ui-icon-shop ui-btn-icon-left" data-transition="flow" style="color: goldenrod">Temas</a></li>
+                    <li><a href="#evento" class="ui-btn ui-icon-action ui-btn-icon-left" data-transition="flow" style="color: goldenrod">Eventos</a></li>
+                </ul>
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="tutorial" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h2>Tutorial</h2>
+            <p>Exemplos utilizando os conceitos apresentados em &ldquo;Tutorial&ldquo;.</p>
+            <a href="#pagina1" class="btnVoltar ui-btn" data-transition="pop">Página Simples</a>
+            <a href="#pagina2" class="btnVoltar ui-btn" data-transition="pop">Janela de Diálogo</a>
+            <a href="#pagina3" class="btnVoltar ui-btn" data-transition="pop">Efeitos de Transição</a>
+            <a href="#pagina4" class="btnVoltar ui-btn" data-transition="pop">Botões</a>
+            <a href="#pagina5" class="btnVoltar ui-btn" data-transition="pop">Ícones</a>
+            <a href="#pagina6" class="btnVoltar ui-btn" data-transition="pop">PopUp</a>
+            <a href="#toolbarIntro" class="btnVoltar ui-btn" data-transition="pop">Barra de Ferramenta</a>
+            <a href="#pagina17" class="btnVoltar ui-btn" data-transition="pop">Barra de Navegação</a>
+            <a href="#pagina18" class="btnVoltar ui-btn" data-transition="pop">Panel</a>
+            <a href="#pagina19" class="btnVoltar ui-btn" data-transition="pop">Collapsibles</a>
+            <a href="#tabelaIntro" class="btnVoltar ui-btn" data-transition="pop">Tabelas</a>
+            <a href="#gridIntro" class="btnVoltar ui-btn" data-transition="pop">Grid</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="lista" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lista</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h1>Lista</h1>
+            <a href="#pagina25" class="ui-btn" data-transition="pop">Manualmente Dividida</a>
+            <a href="#pagina26" class="ui-btn" data-transition="pop">Automaticamente Dividida</a>
+            <a href="#pagina27" class="ui-btn" data-transition="pop">Split List Buttons</a>
+            <a href="#pagina28" class="ui-btn" data-transition="pop">Botões Contadores</a>
+            <a href="#pagina29" class="ui-btn" data-transition="pop">List Thumbnails</a>
+            <a href="#pagina30" class="ui-btn" data-transition="pop">Lista de Iténs (Browsers)</a>
+            <a href="#pagina31" class="ui-btn" data-transition="pop">Lista pra Download</a>
+            <a href="#pagina32" class="ui-btn" data-transition="pop">Pesquisar na Lista</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="formulario" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Formulário</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h1>Formulário</h1>
+            <a href="#pagina33" class="ui-btn" data-transition="pop">Formulário Padrão</a>
+            <a href="#pagina34" class="ui-btn" data-transition="pop">Formulário em PopUp</a>
+            <a href="#pagina35" class="ui-btn" data-transition="pop">Ranger e Checkbox</a>
+
+
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="tema" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Temas</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="text-align:center;" data-theme="b">
+            <img src="images/manatwork.fw.png" style="width:60%;" />
+            <p>Construindo...</p>
+            <h4>Área sobre o uso de Temas no jQuery Mobile em construção.</h4>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="evento" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Eventos</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h1>Evento</h1>
+            <a href="#pagina36" class="ui-btn">Cliente</a>
+            <a href="#pagina37" class="ui-btn" data-transition="fade">Mouse Virtual</a>
+            <a href="orientScroll.html" class="ui-btn ui-disabled" data-transition="fade">Orientação &amp; ScrollBar</a>
+            <a href="pageevents.html" class="ui-btn ui-disabled" data-transition="fade">Página</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="destaque" style="background-color: #108040; color: #FFFFFF;">
+        
+        <div data-role="panel" id="meupaineldest4" style="background-color:red; color:white;" data-swipe-close="true" data-display="overlay">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            <p style="background-color:white;color:red;">Fechar arraste o dedo para a esquerda.</p>
+        </div>
+
+        <div data-role="panel" id="meupaineldest5" style="background-color:red; color:white;" data-swipe-close="true" data-display="push">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            <p style="background-color:white;color:red;">Fechar arraste o dedo para a esquerda.</p>
+        </div>
+
+        <div data-role="panel" id="meupaineldest6" style="background-color:red; color:white;" data-swipe-close="true" data-display="reveal">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            <p style="background-color:white;color:red;">Fechar arraste o dedo para a esquerda.</p>
+        </div>
+        
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Destaque</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h1>Destaque</h1>
+            <p style="font-size:small;">Esta página visa destacar algumas das possibilidades do jQuery Mobile.</p>
+            <p style="font-size:small;">Efeitos de Transição de Páginas:</p>
+            <a href="#pagina3" class="btnVoltar ui-btn" data-transition="pop">Efeitos de Transição</a>
+            <p style="font-size:small;">Uso de Popup:</p>
+            <a href="#pagina6" class="btnVoltar ui-btn" data-transition="pop">PopUp</a>
+            <p style="font-size:small;">Exemplo mostrando o uso de ToolBar (Barra de Ferramenta):</p>
+            <a href="#pagina11" class="ui-btn">Loren (Inline)</a>
+            <a href="#pagina14" class="ui-btn">Loren (Fixed)</a>
+            <a href="#pagina15" class="ui-btn">Loren (Fixed e Fullscreen)</a>
+            <p style="font-size:small;">Exemplo mostrando o uso de Panel:</p>
+            
+            <a href="#meupaineldest4" class="ui-btn" data-display="overlay">Overlay</a>
+            <a href="#meupaineldest5" class="ui-btn" data-display="push">Push</a>
+            <a href="#meupaineldest6" class="ui-btn" data-display="reveal">Reveal</a>
+            
+            <p style="font-size:small;">Exemplo mostrando o uso de Tabela:</p>
+            <a href="#pagina21" class="ui-btn">Tabela Exibida por Colunas</a>
+            <p style="font-size:small;">Exemplo mostrando o uso de Grid:</p>
+            <a href="#pagina23" class="ui-btn">Grid (ui-responsive)</a>
+            <p style="font-size:small;">Exemplo mostrando o uso de Lista:</p>
+            <a href="#pagina26" class="ui-btn" data-transition="pop">Automaticamente Dividida</a>
+            <a href="#pagina32" class="ui-btn" data-transition="pop">Pesquisar na Lista</a>
+            <p style="font-size:small;">Exemplo mostrando o uso de Formulário:</p>
+            <a href="#pagina34" class="ui-btn" data-transition="pop">Formulário em PopUp</a>
+            <a href="#pagina35" class="ui-btn" data-transition="pop">Ranger e Checkbox</a>
+            <p style="font-size:small;">Exemplo mostrando o uso de Evento:</p>
+            <a href="#pagina36" class="ui-btn">Cliente</a>
+            <a href="#pagina37" class="ui-btn" data-transition="fade">Mouse Virtual</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <!--------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!-- 01 - Página simples -->
+    <div data-role="page" id="pagina1">
+        <div data-role="main" class="ui-content">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.</p>
+
+            <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus.</p>
+
+            <p>Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi.</p>
+
+            <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales.</p>
+
+            <p>Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
+
+            <p>Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor.</p>
+
+            <p>Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi.</p>
+
+            <p>Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.</p>
+
+            <p>Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+
+        </div>
+    </div>
+
+    <!-- 02 - janela de dialogo -->
+    <div data-role="page" data-dialog="true" id="pagina2">
+        <div data-role="main" class="ui-content">
+            Eu sou uma Janela de Dialogo.
+            <a href="#" data-rel="back" class="ui-btn ui-icon-delete ui-btn-icon-left">Fechar</a>
+        </div>
+    </div>
+
+    <!-- 03 - Lorem Curto (Usado para mostrar efeito de Transição.) -->
+    <div data-role="page" id="pagina3" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h4>Efeitos de Transição:</h4>
+            <p>Exemplos utilizando os efeitos de transição de páginas apresentados:</p>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="none">Sem Efeito</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="slide">Slide</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="slide" data-direction="reverse">Slide(Reverse)</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="slidedown">SlideDown</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="slideup">SlideUp</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="slidefade">SlideFade</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="turn">Turn</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="pop">Pop</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="fade">Fade</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="flip">Flip</a>
+            <a href="#textoPagina3" class="btnVoltar ui-btn" data-transition="flow">Flow</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="textoPagina3" style="background-color:red;color:white;">
+        <div data-role="main" class="ui-content" style="background-color:red;color:white;">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <!-- 04 - Botões -->
+    <div data-role="page" id="pagina4">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h4>Botões:</h4>
+            <p>Exemplos utilizando os tipos de botões apresentados:</p>
+            Botão 01:
+            <input type="button" value="Botão 01">
+            Botão 02:
+            <button class="ui-btn">Botão 02</button>
+            Botão 03:
+            <a href="#" class="ui-btn">Botão 03</a>
+
+            Botões Agrupados Vertical:
+            <div data-role="controlgroup">
+                <input type="button" value="Botão 01">
+                <button class="ui-btn">Botão 02</button>
+                <a href="#" class="ui-btn">Botão 03</a>
+            </div>
+
+            Botões Agrupados Horizontal:
+            <div data-role="controlgroup" data-type="horizontal">
+                <input type="button" class="ui-mini" value="Botão 01">
+                <button class="ui-btn ui-mini">Botão 02</button>
+                <a href="#" class="ui-btn ui-mini">Botão 03</a>
+            </div>
+
+            Botões Lado a Lado:
+            <div data-role="controlgroup" data-type="horizontal">
+                <a href="#" class="ui-btn ui-mini ui-btn-inline">Botão 01</a>
+                <a href="#" class="ui-btn ui-mini ui-btn-inline">Botão 02</a>
+            </div>
+
+            Classes CSS:
+            <a href="#" class="ui-btn ui-btn-b">Botão 01</a>
+            <a href="#" class="ui-btn ui-corner-all">Botão 02</a>
+            <a href="#" class="ui-btn ui-mini">Botão 03</a>
+            <a href="#" class="ui-btn ui-shadow">Botão 02</a>
+
+            <br>
+            Botão de Voltar:
+            <a href="#" class="ui-btn ui-mini" data-rel="back">Voltar</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 05 - Icones -->
+    <div data-role="page" id="pagina5">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h4>Ícones:</h4>
+            <p>Exemplos utilizando os tipos de ícones apresentados:</p>
+            Icones nos Botões:
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-home">Home</a>
+            <a href="#" class="ui-btn ui-btn-icon-left ui-icon-info">Information</a>
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-search">Search</a>
+            <a href="#" class="ui-btn ui-btn-icon-left ui-icon-delete">Delete</a>
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-back">Back</a>
+            <a href="#" class="ui-btn ui-btn-icon-left ui-icon-audio">Speakers</a>
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-lock">Padlock</a>
+            <a href="#" class="ui-btn ui-btn-icon-left ui-icon-alert">Alert</a>
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-grid">Grid</a>
+            <a href="#" class="ui-btn ui-btn-icon-left ui-icon-audio">Audio</a>
+
+            Posicionamento:
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-arrow-l">Left</a>
+            <a href="#" class="ui-btn ui-btn-icon-right ui-icon-arrow-r">Right</a>
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-top ui-icon-arrow-u">Top</a>
+            <a href="#" class="ui-btn ui-btn-icon-bottom ui-icon-arrow-d">Bottom</a>
+
+            Botão sem Texto:
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-search ui-btn-icon-notext">Search</a>
+
+            Botão sem Circulo:
+            <a href="#" class="ui-btn ui-btn-b ui-btn-icon-left ui-icon-search ui-nodisc-icon">Search</a>
+
+            Botão com Inversão de Cores:
+            <a href="#" class="ui-btn ui-btn-icon-left ui-icon-info ui-alt-icon">Information</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 06 - PopUp -->
+    <div data-role="page" id="pagina6" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <h4>PopUp:</h4>
+            <p>Exemplos utilizando o uso de PopUp:</p>
+            Originando o PopUp:
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window">Window</a>
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="btnPopUp">#btnPopUp</a>
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="origin">Origin</a>
+
+            Alguns efeitos no PopUp:
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="fade">fade</a>
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="pop">pop</a>
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="flip">flip</a>
+            <a href="#meupopup" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="slide">slide</a>
+
+            Setas no PopUp:
+            <a href="#meupopup1" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="fade">Esquerda</a>
+            <a href="#meupopup2" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="fade">Direita</a>
+            <a href="#meupopup3" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="fade">Cima</a>
+            <a href="#meupopup4" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="fade">Baixo</a>
+
+            Página completa num PopUp:
+            <a href="#meupopup5" class="ui-btn ui-btn-icon-left ui-icon-action" data-rel="popup" data-position-to="window" data-transition="pop">Página</a>
+
+            <p>Clique na Image:</p>
+            <a href="#meupopup6" data-rel="popup" data-transition="fade">
+                <img src="images/logo.png" style="width:50%;float:right;" />
+            </a>
+
+
+            <div data-role="popup" id="meupopup" class="ui-content">
+                <h1>Lorem ipsum</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            </div>
+
+            <div data-role="popup" id="meupopup1" class="ui-content" data-arrow="l">
+                <h1>Lorem ipsum</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            </div>
+
+            <div data-role="popup" id="meupopup2" class="ui-content" data-arrow="r">
+                <h1>Lorem ipsum</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            </div>
+
+            <div data-role="popup" id="meupopup3" class="ui-content" data-arrow="t">
+                <h1>Lorem ipsum</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            </div>
+
+            <div data-role="popup" id="meupopup4" class="ui-content" data-arrow="b">
+                <h1>Lorem ipsum</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            </div>
+
+            <div data-role="popup" id="meupopup5">
+                <div data-role="header" data-theme="b">
+                    <h1>Cabeçalho</h1>
+                </div>
+                <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+                </div>
+                <footer data-theme="b" data-role="footer" style="color:#78CFF5">
+                    <h1>Rodapé da Página PopUp</h1>
+                </footer>
+            </div>
+
+            <div data-role="popup" id="meupopup6" class="ui-content">
+                <img src="images/logo.png" />
+            </div>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 06 - Trabalhando com ToolBar -->
+
+    <div data-role="page" id="toolbarIntro" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h4>ToolBar</h4>
+            <p>Exemplo mostrando o uso de ToolBar (Barra de Ferramenta):</p>
+            <a href="#pagina7" class="ui-btn">Cabeçalho Simples</a>
+            <a href="#pagina8" class="ui-btn">Botão À Esquerda</a>
+            <a href="#pagina9" class="ui-btn">Botão À Direita</a>
+            <a href="#pagina10" class="ui-btn">Horizontal e Vertical (Footer)</a>
+            <a href="#pagina11" class="ui-btn">Loren (Inline)</a>
+            <a href="#pagina14" class="ui-btn">Loren (Fixed)</a>
+            <a href="#pagina15" class="ui-btn">Loren (Fixed e Fullscreen)</a>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="pagina7" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b">
+            <a href="#" class="ui-btn ui-icon-left ui-btn-icon-left ui-icon-home">Botão 01</a>
+            <h1>Tutorial</h1>
+            <a href="#" class="ui-btn ui-icon-left ui-btn-icon-right ui-icon-user">Botão 02</a>
+        </div>
+        <div data-role="main" class="ui-content">
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina8" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b">
+            <a href="#" class="ui-btn ui-icon-left ui-btn-icon-left ui-icon-home ui-btn-left">Botão 01</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+        </div>
+        <div data-role="main" class="ui-content">
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina9" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b">
+            <a href="#" class="ui-btn ui-icon-left ui-btn-icon-left ui-icon-home ui-btn-right">Botão 01</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+        </div>
+        <div data-role="main" class="ui-content">
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina10" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <h3>CORPO DA PÁGINA</h3>
+        </div>
+        <div data-role="footer" data-theme="b">
+            Horizontal:
+            <div data-role="controlgroup" data-type="horizontal">
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 02</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 03</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 04</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 02</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 03</a>
+            </div>
+            Vertical:
+            <div data-role="controlgroup" data-type="vertical">
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 02</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 03</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 04</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 02</a>
+                <a href="#" class="ui-btn ui-btn-icon-top ui-icon-home">Botão 03</a>
+            </div>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina11" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="inline">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.</p>
+
+            <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus.</p>
+
+            <p>Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi.</p>
+
+            <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales.</p>
+
+            <p>Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
+
+            <p>Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor.</p>
+
+            <p>Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi.</p>
+
+            <p>Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.</p>
+
+            <p>Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="inline" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="pagina14" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.</p>
+
+            <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus.</p>
+
+            <p>Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi.</p>
+
+            <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales.</p>
+
+            <p>Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
+
+            <p>Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor.</p>
+
+            <p>Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi.</p>
+
+            <p>Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.</p>
+
+            <p>Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina15" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.</p>
+
+            <p>Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus.</p>
+
+            <p>Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi.</p>
+
+            <p>Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales.</p>
+
+            <p>Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
+
+            <p>Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor.</p>
+
+            <p>Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi.</p>
+
+            <p>Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.</p>
+
+            <p>Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.</p>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" data-fullscreen="true" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 07 - jQuery Mobile Navigation Bars -->
+
+    <div data-role="page" id="pagina17" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#pagina17" class="ui-btn ui-state-persist ui-btn-active" data-icon="search" data-iconpos="top">Início</a></li>
+                    <li><a href="#usuario" class="ui-btn" data-icon="user" data-iconpos="top">Users</a></li>
+                    <li><a href="#configuracao" class="ui-btn" data-icon="gear" data-iconpos="top">Config</a></li>
+                </ul>
+            </div>
+        </div>
+        <section data-role="content" style="background-color: #108040;">
+            <h3>Página de HOME.</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="usuario" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#pagina17" class="ui-btn" data-icon="search" data-iconpos="top">Início</a></li>
+                    <li><a href="#usuario" class="ui-btn ui-state-persist ui-btn-active" data-icon="user" data-iconpos="top">Users</a></li>
+                    <li><a href="#configuracao" class="ui-btn" data-icon="gear" data-iconpos="top">Config</a></li>
+                </ul>
+            </div>
+        </div>
+        <section data-role="content" style="background-color: #108040;">
+            <h3>Página de Usuário.</h3>
+
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="configuracao" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#pagina17" class="ui-btn" data-icon="search" data-iconpos="top">Início</a></li>
+                    <li><a href="#usuario" class="ui-btn" data-icon="user" data-iconpos="top">Users</a></li>
+                    <li><a href="#configuracao" class="ui-btn ui-state-persist ui-btn-active" data-icon="gear" data-iconpos="top">Config</a></li>
+                </ul>
+            </div>
+        </div>
+        <section data-role="content" style="background-color: #108040;">
+            <h3>Página de Configuração.</h3>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 08 - jQuery Mobile Panels -->
+    <!-- O painel será criado dentro da div de conteúdo. -->
+
+    <div data-role="page" id="pagina18" style="background-color: #108040; color: #FFFFFF;">
+
+        <div data-role="panel" id="meupainel1" style="background-color:red; color:white;">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel2" style="background-color:red; color:white;" data-dismissible="false">
+            <h1>Lorem it mpsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            <a href="#" data-rel="close" class="ui-btn">Fechar</a>
+        </div>
+
+        <div data-role="panel" id="meupainel3" style="background-color:red; color:white;" data-swipe-close="true">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel4" style="background-color:red; color:white;" data-swipe-close="true" data-display="overlay">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel5" style="background-color:red; color:white;" data-swipe-close="true" data-display="push">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel6" style="background-color:red; color:white;" data-swipe-close="true" data-display="reveal">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel7" style="background-color:red; color:white;" data-swipe-close="true" data-position="right">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel8" style="background-color:red; color:white;" data-swipe-close="true" data-position="left">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel9" style="background-color:red; color:white;" data-swipe-close="true">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+        </div>
+
+        <div data-role="panel" id="meupainel10" style="background-color:red; color:white;" data-position-fixed="true">
+            <h1>Lorem ipsum</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.</p>
+            <a href="#pag77" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Fechar</a>
+        </div>
+
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+
+        <section data-role="content" style="background-color: #108040; color: #FFFFFF;">
+            <h4>Panel</h4>
+            <p>Exemplo mostrando o uso de Panel:</p>
+
+            <p>Tipos de Fechamentos:</p>
+            <a href="#meupainel2" class="ui-btn">Abrir (desmissible=false)</a>
+            <a href="#meupainel3" class="ui-btn">Swipe Close</a>
+
+            <p>Tipos de Exibição do Painel:</p>
+            <a href="#meupainel4" class="ui-btn" data-display="overlay">Overlay</a>
+            <a href="#meupainel5" class="ui-btn" data-display="push">Push</a>
+            <a href="#meupainel6" class="ui-btn" data-display="reveal">Reveal</a>
+
+            <p>Direação do Painel:</p>
+            <a href="#meupainel7" class="ui-btn">Abrir Painel(Direita)</a>
+            <a href="#meupainel8" class="ui-btn">Abrir Painel(Esquerda)</a>
+
+            <p>Posição do Painel:</p>
+            <a href="#meupainel9" class="ui-btn">Abrir Ao Lado</a>
+            <a href="#meupainel10" class="ui-btn">Abrir Sobrepondo</a>
+
+
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 08 - jQuery Mobile Collapsibles -->
+    <!--
+        <div data-role="page" id="tabelaIntro" style="background-color: #108040; color: #FFFFFF;">
+            <div data-role="header" data-theme="b" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#pagina17" class="ui-btn" data-icon="search" data-iconpos="top">Home</a></li>
+                        <li><a href="#usuario" class="ui-btn" data-icon="user" data-iconpos="top">Users</a></li>
+                        <li><a href="#configuracao" class="ui-btn ui-state-persist ui-btn-active" data-icon="gear" data-iconpos="top">Config</a></li>
+                    </ul>
+                </div>
+            </div>
+            <section data-role="content" style="background-color: #108040;">
+                <h3>Página de Configuração.</h3>
+            </section>
+            <footer data-theme="b" data-role="footer" data-fullscreen="false" data-position="fixed" style="color:#78CFF5">
+                <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                    <img src="titulo.fw.png" style="width:40%;text-align:right" /><br />
+                </div>
+                <small>&#169Anderson2016 - Todos os Direitos Reservados.</small>
+            </footer>
+        </div>
+    -->
+
+
+    <div data-role="page" id="pagina19" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content">
+            <h4>Collapsible</h4>
+            <p>Exemplo mostrando o uso de Collapsible:</p>
+
+            <p>Collapsible:</p>
+            <div data-role="collapsible">
+                <h1>Lorem ipsum</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.
+                    Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.
+                    Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum
+                    lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                    Curabitur sodales ligula in libero.
+                </p>
+            </div>
+
+
+            <p>Collapsible iniciando "aberto":</p>
+            <div data-role="collapsible" data-collapsed="false">
+                <h1>Lorem ipsum</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.
+                    Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.
+                    Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum
+                    lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                    Curabitur sodales ligula in libero.
+                </p>
+            </div>
+
+            <p>Aninhamento de Collapsible</p>
+            <div data-role="collapsible">
+                <h1>Lorem ipsum 01:</h1>
+                <div data-role="collapsible">
+                    <h1>Lorem ipsum 02</h1>
+                    <div data-role="collapsible">
+                        <h1>Lorem ipsum 03</h1>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus
+                            ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris.
+                            Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
+                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur
+                            sodales ligula in libero.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div data-role="collapsible-set">
+                <h1>Conjunto:</h1>
+                <div data-role="collapsible">
+                    <h1>Lorem ipsum 02</h1>
+                    <div data-role="collapsible">
+                        <h1>Lorem ipsum 03</h1>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus
+                            ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris.
+                            Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
+                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur
+                            sodales ligula in libero.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 09 - jQuery Mobile Tables -->
+
+    <div data-role="page" id="tabelaIntro" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content" style="background-color: #108040;">
+            <h4>Tabelas</h4>
+            <p>Exemplo mostrando o uso de Tabelas:</p>
+            <a href="#pagina20" class="ui-btn">Tabela Simples</a>
+            <a href="#pagina21" class="ui-btn">Tabela Exibida por Colunas</a>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina20" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <h1>Tabelas</h1>
+        </div>
+        <section data-role="content">
+
+            <table data-role="table" class="ui-responsive">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Data de Nascimento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>111</td>
+                        <td>Anderson</td>
+                        <td>12/11/1981</td>
+                    </tr>
+                    <tr>
+                        <td>222</td>
+                        <td>Adriana</td>
+                        <td>27/02/1975</td>
+                    </tr>
+                    <tr>
+                        <td>333</td>
+                        <td>Mara</td>
+                        <td>08/06/1954</td>
+                    </tr>
+                    <tr>
+                        <td>444</td>
+                        <td>Eduardo</td>
+                        <td>18/09/1982</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina21" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <h1>Tabelas</h1>
+        </div>
+        <section data-role="content" style="background-color: #108040; color: #FFFFFF;">
+
+            <style>
+                th {
+                    background-color: black;
+                    color: white;
+                }
+
+                tr:nth-child(odd) {
+                    background-color: lightblue;
+                    color: black;
+                }
+
+                tr:nth-child(even) {
+                    background-color: yellow;
+                    color: green;
+                }
+            </style>
+
+            <table data-role="table" class="ui-responsive" data-mode="columntoggle" id="minhatabela" data-column-btn-text="Colunas">
+                <thead>
+                    <tr>
+                        <th data-priority="3">Código</th>
+                        <th data-priority="1">Nome</th>
+                        <th data-priority="2">Data de Nascimento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>111</td>
+                        <td>Anderson</td>
+                        <td>12/11/1981</td>
+                    </tr>
+                    <tr>
+                        <td>222</td>
+                        <td>Adriana</td>
+                        <td>27/02/1975</td>
+                    </tr>
+                    <tr>
+                        <td>333</td>
+                        <td>Mara</td>
+                        <td>08/06/1954</td>
+                    </tr>
+                    <tr>
+                        <td>444</td>
+                        <td>Joana</td>
+                        <td>11/11/1982</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- 10 - jQuery Mobile Grids -->
+
+
+    <div data-role="page" id="gridIntro" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content" style="background-color: #108040;">
+            <h4>Grids</h4>
+            <p>Exemplo mostrando o uso de Grids:</p>
+            <a href="#pagina22" class="ui-btn">Grid Simples</a>
+            <a href="#pagina23" class="ui-btn">Grid (ui-responsive)</a>
+            <a href="#pagina24" class="ui-btn">Grid 03</a>
+
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+
+    <div data-role="page" id="pagina22" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content">
+            Grid:
+            <div class="ui-grid-d">
+                <a href="#" class="ui-btn ui-block-a">ITEM 1</a>
+                <a href="#" class="ui-btn ui-block-b">ITEM 2</a>
+                <a href="#" class="ui-btn ui-block-c">ITEM 3</a>
+                <a href="#" class="ui-btn ui-block-d">ITEM 4</a>
+                <a href="#" class="ui-btn ui-block-e">ITEM 5</a>
+            </div>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="pagina23" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content">
+            Grid (ui-responsive):
+            <div class="ui-grid-d ui-responsive">
+                <a href="#" class="ui-btn ui-block-a">Home</a>
+                <a href="#" class="ui-btn ui-block-b">Home</a>
+                <a href="#" class="ui-btn ui-block-c">Home</a>
+                <a href="#" class="ui-btn ui-block-d">Home</a>
+                <a href="#" class="ui-btn ui-block-e">Home</a>
+            </div>
+            <p>Mude a orientação (portail or landscape) da página para ver o efeito.</p>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina24" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Tutorial</h1>
+        </div>
+        <section data-role="content">
+            Grid (Iténs por Linhas):<br><br>
+            <div class="ui-grid-b">
+                <a href="#" class="ui-btn ui-block-a">Home</a>
+                <a href="#" class="ui-btn ui-block-b">Home</a>
+                <a href="#" class="ui-btn ui-block-c">Home</a>
+                <a href="#" class="ui-btn ui-block-a">Home</a>
+                <a href="#" class="ui-btn ui-block-b">Home</a>
+                <a href="#" class="ui-btn ui-block-c">Home</a>
+            </div>
+        </section>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- jQ Mobile Lists -->
+    <!-- 01 - jQuery Mobile List Views -->
+
+    <div data-role="page" id="pagina25" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <h2>Lista 01:</h2>
+            <ul data-role="listview" data-inset="true">
+                <!-- data-inset cria uma margem. -->
+                <li data-role="list-divider">Homem</li>
+                <li>Anderson</li>
+                <li data-role="list-divider">Mulher</li>
+                <li>Beatriz</li>
+                <li>Carla</li>
+                <li>Deyse</li>
+                <li>Eliane</li>
+                <li>Fernanda</li>
+                <li>Gabriella</li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina26" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <h2>Lista Autodivida:</h2>
+            <ul data-role="listview" data-autodividers="true">
+                <li>Anderson</li>
+                <li>Adriana</li>
+                <li>Beatriz</li>
+                <li>Carla</li>
+                <li>Cristiane</li>
+                <li>Deyse</li>
+                <li>Eliane</li>
+                <li>Fernanda</li>
+                <li>Fábia</li>
+                <li>Gabriella</li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="pagina27" style="background-color:#108040;color:white;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+
+            <script>
+
+                $(document).ready(function () {
+
+                    $("a").click(function () {
+
+                        $("#demo").text();
+                        $("#demo").text($(this).text());
+                    });
+                });
+
+            </script>
+        </div>
+
+
+        <div data-role="main" class="ui-content">
+            <ul data-role="listview" data-theme="b">
+                <li><a href="#">Prosseguir</a></li>
+                <li data-icon="action"><a href="#">Ação</a></li>
+                <li data-icon="gear"><a href="#">Configuração</a></li>
+                <li data-icon="user"><a href="#">Usuário</a></li>
+                <li data-icon="delete"><a href="#">Fechar</a></li>
+                <li data-icon="star"><a href="#">Premium</a></li>
+                <p id="demo"></p>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="pagina28" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <ul data-role="listview">
+                <li><a href="#">Inbox<span class="ui-li-count">25</span></a></li>
+                <li><a href="#">Sent<span class="ui-li-count">432</span></a></li>
+                <li><a href="#">Trash<span class="ui-li-count">7</span></a></li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+    <div data-role="page" id="pagina29" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <br /><br />
+        <div data-role="main" class="ui-content">
+            <ul data-role="listview">
+                <li><a href="#"><img src="jQuery/images/icons-png/video-black.png" class="ui-li-icon" />Item 01</a></li>
+                <li><a href="#"><img src="jQuery/images/icons-png/shop-black.png" class="ui-li-icon" />Item 02</a></li>
+                <li><a href="#"><img src="jQuery/images/icons-png/star-black.png" class="ui-li-icon" />Item 03</a></li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina30" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <ul data-role="listview">
+                <li>
+                    <a href="#">
+                        <img src="firefox.png" /><h2>Firefox</h2>
+                        <p>Projeto desenvolvido pela Mozilla desde 2004.</p>
+                    </a>
+                </li>
+                <li><a href="#"><img src="chrome.png" /><h2>Chrome</h2><p>Projeto desenvolvido pela Google desde 2008.</p></a></li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina31" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <ul data-role="listview">
+                <li>
+                    <a href="#down"><img src="chrome.png" /><h2>Chrome</h2><p>Projeto desenvolvido pela Google desde 2008.</p></a>
+                </li>
+                <li>
+                    <a href="#down"><img src="chrome.png" /><h2>Chrome</h2><p>Projeto desenvolvido pela Google desde 2008.</p></a>
+                </li>
+                <li>
+                    <a href="#down"><img src="chrome.png" /><h2>Chrome</h2><p>Projeto desenvolvido pela Google desde 2008.</p></a>
+                </li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="down" data-dialog="true" style="background-color:red;">
+        <div data-role="main" class="ui-content">
+            Baixando o Google Chrome...
+        </div>
+    </div>
+
+    <div data-role="page" id="pagina32" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Lists</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+
+            <form>
+                <input type="search" id="txtSearch" data-clear-btn="true" placeholder="Informe um nome." />
+            </form>
+            <br /><br /><br />
+            <ul data-role="listview" data-filter="true" data-input="#txtSearch" data-theme="b">
+                <li data-filtertex="fodao">Anderson</li>
+                <li data-filtertext="gostosa">Adriana</li>
+                <li>Letícia</li>
+                <li data-filtertext="Deusa">Maurina</li>
+                <li>Maria</li>
+                <li>Joana</li>
+                <li>Eduardo</li>
+                <li>Carla</li>
+                <li>Fernanda</li>
+                <li>Jussara</li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- jQ Mobile Forms -->
+
+    <div data-role="page" id="pagina33" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Formulário</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color:#108040;color:white;">
+            <form action="#" method="post" id="formulario">
+                <div class="ui-field-contain">
+                    <label for="codigo" class="ui-hidden-accessible">Código:</label>
+                    <input type="number" name="codigo" id="codigo" data-clear-btn="true" data-role="none" />
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="nome" id="nome" placeholder="Informe o seu nome..." data-clear-btn="true" />
+                    <label for="informacoes">Informações Adicionais:</label>
+                    <textarea name="informacoes" id="informacoes"></textarea>
+                    <label for="search">Buscar:</label>
+                    <input type="search" name="search" id="search">
+                    <fieldset data-role="controlgroup">
+                        <legend>Informe o seu Sexo:</legend>
+                        <label for="male">Masculino</label>
+                        <input type="radio" name="gender" id="male" value="masculino">
+                        <label for="female">Feminino</label>
+                        <input type="radio" name="gender" id="female" value="feminino">
+                    </fieldset>
+                    <fieldset data-role="controlgroup">
+                        <legend>Escolha as suas cores favoritas:</legend>
+                        <label for="red">Vermelho</label>
+                        <input type="checkbox" name="favcolor" id="red" value="red">
+                        <label for="green">Verde</label>
+                        <input type="checkbox" name="favcolor" id="green" value="green">
+                        <label for="blue">Azul</label>
+                        <input type="checkbox" name="favcolor" id="blue" value="blue">
+                    </fieldset>
+                    <fieldset class="ui-field-contain">
+                        <label for="day">Selecione o dia da Semana:</label>
+                        <select name="day" id="day" data-native-menu="true">
+                            <option value="mon">Segunda</option>
+                            <option value="tue">Terça</option>
+                            <option value="wed">Quarta</option>
+                        </select>
+                    </fieldset>
+                    <fieldset class="ui-field-contain">
+                        <label for="day">Selecione o dia da Semana (Multiplos):</label>
+                        <select name="day" id="day" data-native-menu="true" multiple>
+                            <option value="mon">Segunda</option>
+                            <option value="tue">Terça</option>
+                            <option value="wed">Quarta</option>
+                        </select>
+                    </fieldset>
+                    <br /><br />
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <input type="button" data-icon="gear" data-iconpos="left" value="Botão" data-mini="true">
+                        <input type="reset" data-icon="delete" data-iconpos="left" value="Limpar" data-mini="true">
+                        <input type="submit" data-icon="action" data-iconpos="left" value="Enviar" data-mini="true">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina34" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Formulário</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <a href="#loginPopUp" class="ui-btn ui-icon-user ui-btn-icon-left" data-rel="popup" data-theme="b" data-transition="pop">Efetuar Login</a>
+        </div>
+
+        <div data-role="popup" id="loginPopUp" data-theme="a">
+            <div data-role="main" class="ui-content">
+                <form action="#" method="post">
+                    <div class="ui-field-contain" style="background-color:InactiveBorder">
+                        <h2>Efetuar Login</h2>
+                        <label for="login">Login:</label>
+                        <input type="text" name="login" id="login" data-clear-btn="true" />
+                        <label for="senha">Senha:</label>
+                        <input type="password" name="senha" id="senha" data-clear-btn="true" />
+                        <input type="submit" class="ui-btn ui-btn-icon-left ui-icon-user" value="Logar" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <div data-role="page" id="pagina35" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Formulário</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+            <label for="points">Pontos 01:</label>
+            <input type="range" name="points" id="points" value="50" min="0" data-theme="b" max="100" data-show-value="true"
+                   data-popup-enabled="true" data-hightlight="true">
+
+            <label for="points">Pontos 02:</label>
+            <input type="range" name="points" id="points" value="50" min="0" data-theme="b" max="100" step="2.5" data-show-value="false"
+                   data-popup-enabled="false" data-hightlight="false">
+            <br /><br />
+            <form method="post" action="#">
+                <label for="switch">Caixa de Liga de Desliga:</label>
+                <input type="checkbox" data-role="flipswitch" name="switch" id="switch" data-theme="b">
+                <br /><br />
+                Ligada (Checada):<br />
+                <input type="checkbox" data-role="flipswitch" name="switch" id="switch" data-theme="b" checked>
+            </form>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+    <!-- jQuery Mobile Themes -->
+    <!-- Será desenvolvido em separado. -->
+    <!-- jQ Mobile Events -->
+
+    <div data-role="page" id="pagina36" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Eventos</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h4>Eventos</h4>
+            <p>Exemplo mostrando o uso de Eventos disparados pelo cliente:</p>
+            <p style="font-size:12px">Toque na imagem abaixo:</p>
+            <div id="divTap">
+            </div>
+            <p style="font-size:12px">Matenha pressionado na imagem abaixo:</p>
+            <br>
+            <div id="divTapHold">
+            </div>
+            <br>
+            <p style="font-size:12px">Arraste o dedo na imagem abaixo:</p>
+            <div id="divSwipe">
+            </div>
+            <br>
+            <p style="font-size:12px">Arraste o dedo para esquerda na imagem abaixo:</p>
+            <div id="divSwipeLeft">
+            </div>
+            <br>
+            <p style="font-size:12px">Arraste o dedo para direita na imagem abaixo:</p>
+            <div id="divSwipeRight">
+            </div>
+            <br>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+
+    <div data-role="page" id="pagina37" style="background-color: #108040; color: #FFFFFF;">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <a href="#principal" class="btnVoltar ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Home</a>
+            <h1>Eventos</h1>
+        </div>
+        <div data-role="main" class="ui-content" style="background-color: #108040; color: #FFFFFF;">
+            <h3>Mouse Virtual</h3>
+            <p style="font-size:13px;">Clique, matenha pressionado ou delize o sobre o retangulo:</p>
+            <div id="divRet"></div>
+            <ul>
+                <li id="li1">vclick executado:&nbsp<p id="par1"></p></li>
+                <li id="li2">vmousecancel executado:&nbsp<p id="par2"></p></li>
+                <li id="li3">vmousedown executado:&nbsp<p id="par3"></p></li>
+                <li id="li4">vmousemove executado:&nbsp<p id="par4"></p></li>
+                <li id="li5">vmouseout executado:&nbsp<p id="par5"></p></li>
+                <li id="li6">vmouseover executado:&nbsp<p id="par6"></p></li>
+                <li id="li7">vmouseup executado:&nbsp<p id="par7"></p></li>
+            </ul>
+        </div>
+        <footer data-theme="b" data-role="footer" data-position="fixed" style="color:#78CFF5">
+            <div style="text-align: right; background-color: #108040; color: #FFFFFF;">
+                <img src="images/logo.png" style="width:40%;text-align:right" /><br />
+            </div>
+            <small>&#169 2016 - Todos os Direitos Reservados.</small>
+        </footer>
+    </div>
+
+
+</body>
+
+</html>
