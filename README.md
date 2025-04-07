@@ -2,7 +2,8 @@
 ![Programming Language](https://img.shields.io/badge/JavaScript-yellow?style=flat&logo=javascript&logoColor=white)  
 ![Framework](https://img.shields.io/badge/jQuery%20Mobile-blue?style=flat&logo=jquery&logoColor=white)  
 ![Platform: Web](https://img.shields.io/badge/Platform-Web-blue?logo=google-chrome)
-![Last Commit](https://img.shields.io/github/last-commit/ander1code/jqmobile-site?color=yellow&logo=github) ![Size](https://img.shields.io/github/repo-size/ander1code/jqmobile-site?color=blue&logo=files) ![License](https://img.shields.io/github/license/ander1code/jqmobile-site?color=black&logo=open-source-initiative)
+
+![Last Commit](https://img.shields.io/github/last-commit/ander1code/jqmobile-site?color=yellow&logo=github) 
 
 ---
 
